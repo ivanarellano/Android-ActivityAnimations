@@ -19,9 +19,9 @@ package com.support.android.designlibdemo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -42,8 +42,7 @@ public class CheeseListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView rv = (RecyclerView) inflater.inflate(
-                R.layout.fragment_cheese_list, container, false);
+        RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.fragment_cheese_list, container, false);
         setupRecyclerView(rv);
         return rv;
     }
@@ -63,23 +62,22 @@ public class CheeseListFragment extends Fragment {
         return list;
     }
 
-    public static class SimpleStringRecyclerViewAdapter
+    public class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<String> mValues;
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
+            public @DrawableRes int cheeseId;
 
-            public final View mView;
             public final ImageView mImageView;
             public final TextView mTextView;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
             }
@@ -112,20 +110,17 @@ public class CheeseListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
+            holder.cheeseId = Cheeses.getRandomCheeseDrawable();
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, CheeseDetailActivity.class);
-                    intent.putExtra(CheeseDetailActivity.EXTRA_NAME, holder.mBoundString);
-
-                    context.startActivity(intent);
+                    startManualAnimCheeseDetailActivity(holder.mImageView, holder.cheeseId, holder.mBoundString);
                 }
             });
 
             Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
+                    .load(holder.cheeseId)
                     .fitCenter()
                     .into(holder.mImageView);
         }
@@ -134,5 +129,26 @@ public class CheeseListFragment extends Fragment {
         public int getItemCount() {
             return mValues.size();
         }
+    }
+
+    private void startManualAnimCheeseDetailActivity(View sharedView, @DrawableRes int backdropId, String title) {
+        Intent intent = new Intent(getActivity(), CheeseDetailActivity.class);
+        intent.putExtra(CheeseDetailActivity.EXTRA_NAME, title);
+        intent.putExtra(CheeseDetailActivity.BACKDROP_ID, backdropId);
+        intent.putExtra(CheeseDetailActivity.VIEW_INFO_EXTRA, createViewInfoBundle(sharedView));
+        startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
+    }
+
+    public Bundle createViewInfoBundle(View view) {
+        int[] screenLocation = new int[2];
+        view.getLocationOnScreen(screenLocation);
+
+        int left = screenLocation[0];
+        int top = screenLocation[1];
+        int width = view.getWidth();
+        int height = view.getHeight();
+
+        return CheeseDetailActivity.ViewInfoExtras.createBundle(width, height, left, top);
     }
 }

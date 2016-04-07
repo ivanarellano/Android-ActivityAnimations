@@ -35,4 +35,13 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="Transparent" parent="Theme.DesignDemo">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="ExpandedTitleAppearance" parent="TextAppearance.AppCompat.Headline">
+
+    </style>
+
 </resources>
