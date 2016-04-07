@@ -1,23 +1,15 @@
-![alt text](https://raw.githubusercontent.com/chrisbanes/cheesesquare/master/art/icon.png)
+Custom Activity Animations Sample
+================================
+This app contains [authentic motion](https://www.google.com/design/spec/animation/authentic-motion.html#) concepts from the [Material Design](https://design.google.com/spec/) visual framework. This demo works on `minSdkVersion 17` and above. It does not use the Transitions framework built into API 21.
 
-Cheesesquare Sample
-===================================
-
-Demos the new Android Design library. This is not an exhaustive sample, but shows
-some of the important features in the Design library:
+This app is based on the [Cheesequare Sample](https://github.com/chrisbanes/cheesesquare). Demos the Android Design library.
+Shows some of the important features in the Design library:
 
 - Collapsing Toolbar
 - FloatingActionButton
 - View anchoring
 - NavigationView
 - Snackbar
-
-Pre-requisites
---------------
-
-- Android SDK v22
-- Android Build Tools v22.0.1
-- Android Support Repository r16 (for v22.2.1)
 
 License
 -------
