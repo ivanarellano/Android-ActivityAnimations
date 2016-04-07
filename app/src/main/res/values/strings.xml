@@ -26,4 +26,6 @@
   <string name="checkin">Checkin</string>
   <string name="menu_settings">Settings</string>
 
+  <string name="cheese_detail_transition">cheeseTransition</string>
+
 </resources>
